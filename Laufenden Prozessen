@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Skript aus 2.1 (Alle laufenden Prozesse in Datei schreiben)
+ziel_datei="prozessliste.txt"
+ps aux > "$ziel_datei"
+
+# Argument (Regex) überprüfen
+if [ $# -lt 1 ]; then
+  echo "Fehler: Bitte geben Sie mindestens ein Argument (Regex) an."
+  echo "Beispiel: $0 'mein_regex' [optionaler_glob]"
+  exit 1
+fi
+
+# Argument (Regex) speichern
+regex="$1"
+
+# Datei nach dem gegebenen Regex durchsuchen und passende Zeilen anzeigen
+grep -E "$regex" "$ziel_datei"
+
+# Überprüfen, ob ein optionales zweites Argument (Glob) angegeben wurde
+if [ $# -eq 2 ]; then
+  glob="$2"
+  rm -i $glob
+else
+  # Wenn kein optionales zweites Argument angegeben wurde, werden alle Dateien gelöscht
+  echo "Es wurde kein optionales zweites Argument (Glob) angegeben. Lösche alle Dateien."
+  rm -i *
+fi
+
